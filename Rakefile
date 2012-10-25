@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "simplecov-console"
   gem.homepage = "http://github.com/chetan/simplecov-console"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Simple console output formatter}
+  gem.description = %Q{Simple console output formatter for SimpleCov}
   gem.email = "chetan@pixelcop.net"
   gem.authors = ["Chetan Sarva"]
   # dependencies defined in Gemfile
