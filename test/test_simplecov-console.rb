@@ -1,7 +1,8 @@
 require 'helper'
 
 class TestSimplecovConsole < MiniTest::Unit::TestCase
-  def test_something_for_real
-    flunk "hey buddy, you should probably rename this file and start testing for real"
+  def test_defined
+    assert defined?(SimpleCov::Formatter::Console)
+    assert defined?(SimpleCov::Formatter::Console::VERSION)
   end
 end
