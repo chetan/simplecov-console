@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "lib/simplecov-console.rb",
+    "simplecov-console.gemspec",
     "test/helper.rb",
     "test/test_simplecov-console.rb"
   ]
