@@ -12,7 +12,7 @@ class SimpleCov::Formatter::Console
     if Module.const_defined? :ROOT then
       root = ROOT
     elsif Module.const_defined? :Rails then
-      root = Rails.root
+      root = Rails.root.to_s
     end
 
     puts
