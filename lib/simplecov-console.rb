@@ -25,6 +25,8 @@ class SimpleCov::Formatter::Console
 
     files = result.files.sort{ |a,b| a.covered_percent <=> b.covered_percent }
 
+    files.select!{|file| file.covered_percent < 100 }
+
     if files.nil? or files.empty? then
       return
     end
