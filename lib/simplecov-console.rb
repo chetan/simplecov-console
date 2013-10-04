@@ -13,6 +13,10 @@ class SimpleCov::Formatter::Console
       root = ROOT
     elsif Module.const_defined? :Rails then
       root = Rails.root.to_s
+    elsif ENV["BUNDLE_GEMFILE"] then
+      root = File.dirname(ENV["BUNDLE_GEMFILE"])
+    else
+      root = Dir.pwd
     end
 
     puts
