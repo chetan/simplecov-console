@@ -20,7 +20,7 @@ class SimpleCov::Formatter::Console
     end
 
     puts
-    puts "COVERAGE: #{colorize(pct(result))} -- #{result.covered_lines}/#{result.total_lines} lines"
+    puts "COVERAGE: #{colorize(pct(result))} -- #{result.covered_lines}/#{result.total_lines} lines in #{result.files.size} files"
     puts
 
     if root.nil? then
@@ -29,7 +29,15 @@ class SimpleCov::Formatter::Console
 
     files = result.files.sort{ |a,b| a.covered_percent <=> b.covered_percent }
 
-    files.select!{|file| file.covered_percent < 100 }
+    covered_files = 0
+    files.select!{ |file|
+      if file.covered_percent == 100 then
+        covered_files += 1
+        false
+      else
+        true
+      end
+    }
 
     if files.nil? or files.empty? then
       return
@@ -45,6 +53,10 @@ class SimpleCov::Formatter::Console
     s = Hirb::Helpers::Table.render(table).split(/\n/)
     s.pop
     puts s.join("\n").gsub(/\d+\.\d+%/) { |m| colorize(m) }
+
+    if covered_files > 0 then
+      puts "#{covered_files} file(s) with 100% coverage not shown"
+    end
 
   end
 
