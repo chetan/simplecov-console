@@ -46,9 +46,6 @@ class SimpleCov::Formatter::Console
     s.pop
     puts s.join("\n").gsub(/\d+\.\d+%/) { |m| colorize(m) }
 
-    puts
-    puts "URL: file://#{root}/coverage/index.html"
-
   end
 
   def pct(obj)
