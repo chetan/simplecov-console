@@ -43,7 +43,13 @@ class SimpleCov::Formatter::Console
       return
     end
 
-    table = files.map{ |f| { :file => f.filename.gsub(root + "/", ''), :coverage => pct(f) } }
+    table = files.map do |f|
+      { :coverage => pct(f),
+        :lines => f.lines_of_code,
+        :file => f.filename.gsub(root + "/", ''),
+        :missed => f.missed_lines.count,
+        :missing => missed(f.missed_lines).join(", ") }
+    end
 
     if table.size > 15 then
       puts "showing bottom (worst) 15 of #{table.size} files"
@@ -58,6 +64,34 @@ class SimpleCov::Formatter::Console
       puts "#{covered_files} file(s) with 100% coverage not shown"
     end
 
+  end
+
+  def missed(missed_lines)
+    groups = {}
+    base = nil
+    previous = nil
+    missed_lines.each do |src|
+      ln = src.line_number
+      if base && previous && (ln - 1) == previous
+        groups[base] += 1
+        previous = ln
+      else
+        base = ln
+        groups[base] = 0
+        previous = base
+      end
+    end
+
+    group_str = []
+    groups.map do |base, v|
+      if v > 0
+        group_str << "#{base}-#{base + v}"
+      else
+        group_str << "#{base}"
+      end
+    end
+
+    group_str
   end
 
   def pct(obj)
