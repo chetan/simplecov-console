@@ -2,7 +2,7 @@ source "http://rubygems.org"
 
 gem "simplecov"
 gem "hirb"
-gem "colorize"
+gem "ansi"
 
 group :development do
   gem "minitest"

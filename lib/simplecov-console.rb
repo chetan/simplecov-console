@@ -1,6 +1,5 @@
-
 require 'hirb'
-require 'colorize'
+require 'ansi/code'
 
 class SimpleCov::Formatter::Console
 
@@ -102,11 +101,11 @@ class SimpleCov::Formatter::Console
     s =~ /([\d.]+)/
     n = $1.to_f
     if n >= 90 then
-      s.colorize(:green)
+      ANSI.green { s }
     elsif n >= 80 then
-      s.colorize(:yellow)
+      ANSI.yellow { s }
     else
-      s.colorize(:red)
+      ANSI.red { s }
     end
   end
 
