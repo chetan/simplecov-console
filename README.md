@@ -44,6 +44,15 @@ showing bottom (worst) 15 of 69 files
 42 file(s) with 100% coverage not shown
 ```
 
+### Table options
+
+In some cases, you may need to pass some options to Hirb's Table.render. For example, if the filenames are
+truncated so much that you can't read them. In that case, you can add a line like this when setting the formatter:
+
+```ruby
+SimpleCov::Formatter::Console.table_options = {max_width: 200}
+SimpleCov.formatter = SimpleCov::Formatter::Console
+```
 
 ### Contributing
 

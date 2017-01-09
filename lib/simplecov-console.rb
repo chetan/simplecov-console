@@ -5,6 +5,11 @@ class SimpleCov::Formatter::Console
 
   VERSION = File.new(File.join(File.expand_path(File.dirname(__FILE__)), "../VERSION")).read.strip
 
+  ATTRIBUTES = %i(table_options)
+  class << self
+    attr_accessor(*ATTRIBUTES)
+  end
+
   def format(result)
 
     root = nil
@@ -55,7 +60,9 @@ class SimpleCov::Formatter::Console
       table = table.slice(0, 15)
     end
 
-    s = Hirb::Helpers::Table.render(table).split(/\n/)
+    table_options = SimpleCov::Formatter::Console.table_options || {}
+
+    s = Hirb::Helpers::Table.render(table, table_options).split(/\n/)
     s.pop
     puts s.join("\n").gsub(/\d+\.\d+%/) { |m| colorize(m) }
 
