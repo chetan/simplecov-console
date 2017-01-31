@@ -5,7 +5,7 @@ class SimpleCov::Formatter::Console
 
   VERSION = File.new(File.join(File.expand_path(File.dirname(__FILE__)), "../VERSION")).read.strip
 
-  ATTRIBUTES = %i(table_options)
+  ATTRIBUTES = [:table_options]
   class << self
     attr_accessor(*ATTRIBUTES)
   end
