@@ -89,11 +89,11 @@ class SimpleCov::Formatter::Console
     end
 
     group_str = []
-    groups.map do |base, v|
-      if v > 0
-        group_str << "#{base}-#{base + v}"
+    groups.map do |starting_line, length|
+      if length > 0
+        group_str << "#{starting_line}-#{starting_line + length}"
       else
-        group_str << "#{base}"
+        group_str << "#{starting_line}"
       end
     end
 
