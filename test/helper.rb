@@ -1,25 +1,15 @@
-require 'rubygems'
-require 'bundler'
-begin
-  Bundler.setup(:default, :development)
-rescue Bundler::BundlerError => e
-  $stderr.puts e.message
-  $stderr.puts "Run `bundle install` to install missing gems"
-  exit e.status_code
-end
+
+$LOAD_PATH.push(File.expand_path("../../lib", __FILE__))
+
+require "bundler/setup"
 require "simplecov"
-require "minitest/autorun"
+require "simplecov-console"
 
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-require 'simplecov-console'
-
-class MiniTest::Test
-end
-
-SimpleCov.formatter = SimpleCov::Formatter::Console
 SimpleCov.start do
-  add_filter "/test/"
+  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
+    SimpleCov::Formatter::HTMLFormatter,
+    SimpleCov::Formatter::Console
+  ])
 end
 
-MiniTest.autorun
+require "minitest/autorun"
