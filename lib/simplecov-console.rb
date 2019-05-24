@@ -3,12 +3,16 @@ require 'ansi/code'
 
 class SimpleCov::Formatter::Console
 
-  VERSION = File.new(File.join(File.expand_path(File.dirname(__FILE__)), "../VERSION")).read.strip
+  VERSION = IO.read(File.expand_path("../../VERSION", __FILE__)).strip
 
-  ATTRIBUTES = [:table_options]
+  ATTRIBUTES = [:table_options, :use_colors]
   class << self
     attr_accessor(*ATTRIBUTES)
   end
+
+  # enable colors unless NO_COLOR=1
+  SimpleCov::Formatter::Console.use_colors =
+    (ENV['NO_COLOR'].nil? or ENV['NO_COLOR'].empty?) ? true : false
 
   def format(result)
 
@@ -110,7 +114,13 @@ class SimpleCov::Formatter::Console
     sprintf("%6.2f%%", obj.covered_percent)
   end
 
+  def use_colors?
+    SimpleCov::Formatter::Console.use_colors
+  end
+
   def colorize(s)
+    return s if !use_colors?
+
     s =~ /([\d.]+)/
     n = $1.to_f
     if n >= 90 then
