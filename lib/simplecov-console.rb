@@ -1,4 +1,4 @@
-require 'hirb'
+require 'terminal-table'
 require 'ansi/code'
 
 class SimpleCov::Formatter::Console
@@ -48,11 +48,13 @@ class SimpleCov::Formatter::Console
     end
 
     table = files.map do |f|
-      { :coverage => pct(f),
-        :lines => f.lines_of_code,
-        :file => f.filename.gsub(root + "/", ''),
-        :missed => f.missed_lines.count,
-        :missing => missed(f.missed_lines).join(", ") }
+      [
+        colorize(pct(f)),
+        f.filename.gsub(root + "/", ''),
+        f.lines_of_code,
+        f.missed_lines.count,
+        missed(f.missed_lines).join(", ")
+      ]
     end
 
     if table.size > 15 then
@@ -61,10 +63,14 @@ class SimpleCov::Formatter::Console
     end
 
     table_options = SimpleCov::Formatter::Console.table_options || {}
+    if !table_options.kind_of?(Hash) then
+      raise ArgumentError.new("SimpleCov::Formatter::Console.table_options must be a Hash")
+    end
+    headings = %w{ coverage file lines missed missing }
 
-    s = Hirb::Helpers::Table.render(table, table_options).split(/\n/)
-    s.pop
-    puts s.join("\n").gsub(/\d+\.\d+%/) { |m| colorize(m) }
+    opts = table_options.merge({:headings => headings, :rows => table})
+    t = Terminal::Table.new(opts)
+    puts t
 
     if covered_files > 0 then
       puts "#{covered_files} file(s) with 100% coverage not shown"

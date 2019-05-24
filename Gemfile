@@ -1,7 +1,7 @@
 source "http://rubygems.org"
 
 gem "simplecov"
-gem "hirb"
+gem "terminal-table"
 gem "ansi"
 
 group :development do

@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0".freeze) if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib".freeze]
   s.authors = ["Chetan Sarva".freeze]
-  s.date = "2017-06-21"
+  s.date = "2019-05-24"
   s.description = "Simple console output formatter for SimpleCov".freeze
   s.email = "chetan@pixelcop.net".freeze
   s.extra_rdoc_files = [
@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = "http://github.com/chetan/simplecov-console".freeze
   s.licenses = ["MIT".freeze]
-  s.rubygems_version = "2.6.8".freeze
+  s.rubygems_version = "3.0.2".freeze
   s.summary = "Simple console output formatter".freeze
 
   if s.respond_to? :specification_version then
@@ -40,7 +40,7 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<simplecov>.freeze, [">= 0"])
-      s.add_runtime_dependency(%q<hirb>.freeze, [">= 0"])
+      s.add_runtime_dependency(%q<terminal-table>.freeze, [">= 0"])
       s.add_runtime_dependency(%q<ansi>.freeze, [">= 0"])
       s.add_development_dependency(%q<minitest>.freeze, [">= 0"])
       s.add_development_dependency(%q<yard>.freeze, [">= 0"])
@@ -48,7 +48,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<juwelier>.freeze, [">= 0"])
     else
       s.add_dependency(%q<simplecov>.freeze, [">= 0"])
-      s.add_dependency(%q<hirb>.freeze, [">= 0"])
+      s.add_dependency(%q<terminal-table>.freeze, [">= 0"])
       s.add_dependency(%q<ansi>.freeze, [">= 0"])
       s.add_dependency(%q<minitest>.freeze, [">= 0"])
       s.add_dependency(%q<yard>.freeze, [">= 0"])
@@ -57,7 +57,7 @@ Gem::Specification.new do |s|
     end
   else
     s.add_dependency(%q<simplecov>.freeze, [">= 0"])
-    s.add_dependency(%q<hirb>.freeze, [">= 0"])
+    s.add_dependency(%q<terminal-table>.freeze, [">= 0"])
     s.add_dependency(%q<ansi>.freeze, [">= 0"])
     s.add_dependency(%q<minitest>.freeze, [">= 0"])
     s.add_dependency(%q<yard>.freeze, [">= 0"])
