@@ -2,7 +2,7 @@
 
 A simple console output formatter for SimpleCov
 
-### Usage
+## Usage
 
 ```bash
 $ gem install simplecov-console
@@ -44,15 +44,32 @@ showing bottom (worst) 15 of 69 files
 42 file(s) with 100% coverage not shown
 ```
 
+## Configuration
+
+### Disabling colorized output
+
+Simply export `NO_COLOR=1` and colors will be disabled.
+
+```sh
+NO_COLOR=1 rake test
+```
+
 ### Table options
 
-In some cases, you may need to pass some options to Hirb's Table.render. For example, if the filenames are
+In some cases, you may need to pass some options to `TerminalTable.new`. For example, if the filenames are
 truncated so much that you can't read them. In that case, you can add a line like this when setting the formatter:
 
 ```ruby
-SimpleCov::Formatter::Console.table_options = {max_width: 200}
+SimpleCov::Formatter::Console.table_options = {:style => {:width => 200}}
 SimpleCov.formatter = SimpleCov::Formatter::Console
 ```
+
+## History
+
+### 0.5 (2019.05.24)
+
+- Replaced `hirb` gem with `terminal-table` due to multiple warnings thrown ([#11](https://github.com/chetan/simplecov-console/issues/11))
+- Support [disabling colorized](https://no-color.org/) output via `NO_COLOR` env var
 
 ### Contributing
 
@@ -66,5 +83,5 @@ SimpleCov.formatter = SimpleCov::Formatter::Console
 
 ### Copyright
 
-Copyright (c) 2014 Chetan Sarva. See LICENSE.txt for
+Copyright (c) 2019 Chetan Sarva. See LICENSE.txt for
 further details.
