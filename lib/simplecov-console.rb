@@ -5,7 +5,7 @@ class SimpleCov::Formatter::Console
 
   VERSION = IO.read(File.expand_path("../../VERSION", __FILE__)).strip
 
-  ATTRIBUTES = [:table_options, :use_colors]
+  ATTRIBUTES = [:table_options, :use_colors, :max_rows]
   class << self
     attr_accessor(*ATTRIBUTES)
   end
@@ -61,9 +61,11 @@ class SimpleCov::Formatter::Console
       ]
     end
 
-    if table.size > 15 then
-      puts "showing bottom (worst) 15 of #{table.size} files"
-      table = table.slice(0, 15)
+    max_rows = SimpleCov::Formatter::Console.fetch(:max_rows, 15)
+
+    if table.size > max_rows && max_rows != -1 then
+      puts "showing bottom (worst) #{max_rows} of #{table.size} files"
+      table = table.slice(0, max_rows)
     end
 
     table_options = SimpleCov::Formatter::Console.table_options || {}
