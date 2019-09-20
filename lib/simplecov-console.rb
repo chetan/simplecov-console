@@ -14,6 +14,9 @@ class SimpleCov::Formatter::Console
   SimpleCov::Formatter::Console.use_colors =
     (ENV['NO_COLOR'].nil? or ENV['NO_COLOR'].empty?) ? true : false
 
+  # configure max rows from MAX_ROWS env var
+  SimpleCov::Formatter::Console.max_rows = ENV.fetch('MAX_ROWS', 15)
+
   def format(result)
 
     root = nil
@@ -61,9 +64,9 @@ class SimpleCov::Formatter::Console
       ]
     end
 
-    max_rows = SimpleCov::Formatter::Console.fetch(:max_rows, 15)
+    max_rows = SimpleCov::Formatter::Console.max_rows
 
-    if table.size > max_rows && max_rows != -1 then
+    if ![-1, nil].include?(max_rows) && table.size > max_rows then
       puts "showing bottom (worst) #{max_rows} of #{table.size} files"
       table = table.slice(0, max_rows)
     end

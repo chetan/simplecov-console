@@ -54,6 +54,10 @@ Simply export `NO_COLOR=1` and colors will be disabled.
 NO_COLOR=1 rake test
 ```
 
+### Maximum Rows Displayed
+
+By default, a maximum of 15 files with the worst coverage are displayed in the report.  You can override this limit by setting the `MAX_ROWS` environment variable, or setting `SimpleCov::Formatter::Console.max_rows = (number)` in your test helper.  Setting a value of `-1` or `nil` will show all of the files.
+
 ### Table options
 
 In some cases, you may need to pass some options to `TerminalTable.new`. For example, if the filenames are
