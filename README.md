@@ -54,9 +54,31 @@ Simply export `NO_COLOR=1` and colors will be disabled.
 NO_COLOR=1 rake test
 ```
 
-### Maximum Rows Displayed
+### Sorting the output
 
-By default, a maximum of 15 files with the worst coverage are displayed in the report.  You can override this limit by setting the `MAX_ROWS` environment variable, or setting `SimpleCov::Formatter::Console.max_rows = (number)` in your test helper.  Setting a value of `-1` or `nil` will show all of the files.
+By default the coverage report is sorted by coverage % in descending order.  To sort alphabetically by path, set the `SORT` environment variable to "path", or add the following to your test helper:
+
+```ruby
+SimpleCov::Formatter::Console.sort = 'path' # sort by file path
+```
+
+### Showing covered files
+
+By default, fully covered files are excluded from the report.  To show them, set the `SHOW_COVERED` environment variable to `true` or add the following to your test helper:
+
+```ruby
+SimpleCov::Formatter::Console.show_covered = true # show all files in coverage report
+```
+
+### Maximum rows displayed
+
+By default, a maximum of 15 files with the worst coverage are displayed in the report.  You can override this limit by setting the `MAX_ROWS` environment variable, or adding the following to your test helper:
+
+```ruby
+SimpleCov::Formatter::Console.max_rows = # some number
+```
+ 
+ Setting a value of `-1` or `nil` will show all of the files.
 
 ### Table options
 

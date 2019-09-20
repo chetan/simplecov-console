@@ -5,7 +5,7 @@ class SimpleCov::Formatter::Console
 
   VERSION = IO.read(File.expand_path("../../VERSION", __FILE__)).strip
 
-  ATTRIBUTES = [:table_options, :use_colors, :max_rows]
+  ATTRIBUTES = [:table_options, :use_colors, :max_rows, :show_covered, :sort]
   class << self
     attr_accessor(*ATTRIBUTES)
   end
@@ -16,6 +16,12 @@ class SimpleCov::Formatter::Console
 
   # configure max rows from MAX_ROWS env var
   SimpleCov::Formatter::Console.max_rows = ENV.fetch('MAX_ROWS', 15)
+
+  # configure show_covered from SHOW_COVERED env var
+  SimpleCov::Formatter::Console.show_covered = ENV.fetch('SHOW_COVERED', 'false') == 'true'
+
+  # configure sort from SORT env var
+  SimpleCov::Formatter::Console.sort = ENV.fetch('SORT', 'coverage')
 
   def format(result)
 
@@ -38,20 +44,26 @@ class SimpleCov::Formatter::Console
       return
     end
 
-    files = result.files.sort{ |a,b| a.covered_percent <=> b.covered_percent }
+    if SimpleCov::Formatter::Console.sort == 'coverage'
+      files = result.files.sort{ |a,b| a.covered_percent <=> b.covered_percent }
+    else
+      files = result.files
+    end
 
     covered_files = 0
-    files.select!{ |file|
-      if file.covered_percent == 100 then
-        covered_files += 1
-        false
-      else
-        true
-      end
-    }
 
-    if files.nil? or files.empty? then
-      return
+    unless SimpleCov::Formatter::Console.show_covered 
+      files.select!{ |file|
+        if file.covered_percent == 100 then
+          covered_files += 1
+          false
+        else
+          true
+        end
+      }
+      if files.nil? or files.empty? then
+        return
+      end
     end
 
     table = files.map do |f|
