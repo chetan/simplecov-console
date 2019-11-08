@@ -15,7 +15,7 @@ class SimpleCov::Formatter::Console
     (ENV['NO_COLOR'].nil? or ENV['NO_COLOR'].empty?) ? true : false
 
   # configure max rows from MAX_ROWS env var
-  SimpleCov::Formatter::Console.max_rows = ENV.fetch('MAX_ROWS', 15)
+  SimpleCov::Formatter::Console.max_rows = ENV.fetch('MAX_ROWS', 15).to_i
 
   # configure show_covered from SHOW_COVERED env var
   SimpleCov::Formatter::Console.show_covered = ENV.fetch('SHOW_COVERED', 'false') == 'true'
@@ -52,7 +52,7 @@ class SimpleCov::Formatter::Console
 
     covered_files = 0
 
-    unless SimpleCov::Formatter::Console.show_covered 
+    unless SimpleCov::Formatter::Console.show_covered
       files.select!{ |file|
         if file.covered_percent == 100 then
           covered_files += 1
