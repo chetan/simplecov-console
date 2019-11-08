@@ -11,10 +11,10 @@ $ gem install simplecov-console
 ```ruby
 SimpleCov.formatter = SimpleCov::Formatter::Console
 # or
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
   SimpleCov::Formatter::HTMLFormatter,
   SimpleCov::Formatter::Console,
-]
+])
 ```
 
 Example output:
