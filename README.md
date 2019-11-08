@@ -18,7 +18,8 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
 ```
 
 Example output:
-```
+
+```text
 COVERAGE:  82.34% -- 2345/2848 lines in 111 files
 
 showing bottom (worst) 15 of 69 files
@@ -77,8 +78,8 @@ By default, a maximum of 15 files with the worst coverage are displayed in the r
 ```ruby
 SimpleCov::Formatter::Console.max_rows = # some number
 ```
- 
- Setting a value of `-1` or `nil` will show all of the files.
+
+Setting a value of `-1` or `nil` will show all of the files.
 
 ### Table options
 
@@ -92,12 +93,16 @@ SimpleCov.formatter = SimpleCov::Formatter::Console
 
 ## History
 
+### 0.6 (2019.11.08)
+
+- Added new config options: `sort`, `show_covered`, and `max_rows`
+
 ### 0.5 (2019.05.24)
 
 - Replaced `hirb` gem with `terminal-table` due to multiple warnings thrown ([#11](https://github.com/chetan/simplecov-console/issues/11))
 - Support [disabling colorized](https://no-color.org/) output via `NO_COLOR` env var
 
-### Contributing
+## Contributing
 
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
