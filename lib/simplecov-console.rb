@@ -76,7 +76,7 @@ class SimpleCov::Formatter::Console
       files = files.slice(0, max_rows)
     end
 
-    send(SimpleCov::Formatter::Console.output_style << "_output",files,root)
+    puts send(SimpleCov::Formatter::Console.output_style << "_output",files,root)
     
     if covered_files > 0 then
       puts "#{covered_files} file(s) with 100% coverage not shown"
@@ -134,6 +134,7 @@ class SimpleCov::Formatter::Console
     end
   end
 
+  # format per-file results output using Terminal::Table
   def table_output(files, root)
     table = files.map do |f|
       [
@@ -153,20 +154,22 @@ class SimpleCov::Formatter::Console
     headings = %w{ coverage file lines missed missing }
 
     opts = table_options.merge({:headings => headings, :rows => table})
-    t = Terminal::Table.new(opts)
-    puts t
+    Terminal::Table.new(opts)
   end
 
+  # format per-file results output as plain text blocks
   def block_output(files, root)
-    puts ""
+    blocks = [""]
     files.each do |f|
-      puts sprintf("%8.8s: %s", 'file', f.filename.gsub(root + "/", ''))
-      puts sprintf("%8.8s: %s (%d/%d lines)", 'coverage', 
+      block = []
+      block << sprintf("%8.8s: %s", 'file', f.filename.gsub(root + "/", ''))
+      block << sprintf("%8.8s: %s (%d/%d lines)", 'coverage', 
                    colorize(sprintf("%.2f%%", f.covered_percent)), 
                    f.covered_lines.count, f.lines_of_code)
-      puts sprintf("%8.8s: %s", 'missed', missed(f.missed_lines).join(", "))
-      puts ""
+      block << sprintf("%8.8s: %s", 'missed', missed(f.missed_lines).join(", "))
+      blocks << block.join("\n")
     end
+    blocks.join("\n") 
   end
 
 end
