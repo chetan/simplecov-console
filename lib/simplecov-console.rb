@@ -5,7 +5,7 @@ class SimpleCov::Formatter::Console
 
   VERSION = IO.read(File.expand_path("../../VERSION", __FILE__)).strip
 
-  ATTRIBUTES = [:table_options, :use_colors, :max_rows, :show_covered, :sort]
+  ATTRIBUTES = [:table_options, :use_colors, :max_rows, :show_covered, :sort, :output_style]
   class << self
     attr_accessor(*ATTRIBUTES)
   end
@@ -22,6 +22,9 @@ class SimpleCov::Formatter::Console
 
   # configure sort from SORT env var
   SimpleCov::Formatter::Console.sort = ENV.fetch('SORT', 'coverage')
+
+  # configure output format ('table', 'block')
+  SimpleCov::Formatter::Console.output_style = ENV.fetch('OUTPUT_STYLE', 'table')
 
   def format(result)
 
@@ -66,33 +69,15 @@ class SimpleCov::Formatter::Console
       end
     end
 
-    table = files.map do |f|
-      [
-        colorize(pct(f)),
-        f.filename.gsub(root + "/", ''),
-        f.lines_of_code,
-        f.missed_lines.count,
-        missed(f.missed_lines).join(", ")
-      ]
-    end
-
     max_rows = SimpleCov::Formatter::Console.max_rows
 
-    if ![-1, nil].include?(max_rows) && table.size > max_rows then
-      puts "showing bottom (worst) #{max_rows} of #{table.size} files"
-      table = table.slice(0, max_rows)
+    if ![-1, nil].include?(max_rows) && files.size > max_rows then
+      puts "showing bottom (worst) #{max_rows} of #{files.size} files"
+      files = files.slice(0, max_rows)
     end
 
-    table_options = SimpleCov::Formatter::Console.table_options || {}
-    if !table_options.kind_of?(Hash) then
-      raise ArgumentError.new("SimpleCov::Formatter::Console.table_options must be a Hash")
-    end
-    headings = %w{ coverage file lines missed missing }
-
-    opts = table_options.merge({:headings => headings, :rows => table})
-    t = Terminal::Table.new(opts)
-    puts t
-
+    send(SimpleCov::Formatter::Console.output_style << "_output",files,root)
+    
     if covered_files > 0 then
       puts "#{covered_files} file(s) with 100% coverage not shown"
     end
@@ -146,6 +131,41 @@ class SimpleCov::Formatter::Console
       ANSI.yellow { s }
     else
       ANSI.red { s }
+    end
+  end
+
+  def table_output(files, root)
+    table = files.map do |f|
+      [
+        colorize(pct(f)),
+        f.filename.gsub(root + "/", ''),
+        f.lines_of_code,
+        f.missed_lines.count,
+        missed(f.missed_lines).join(", ")
+      ]
+    end
+
+    table_options = SimpleCov::Formatter::Console.table_options || {}
+    if !table_options.kind_of?(Hash) then
+      raise ArgumentError.new("SimpleCov::Formatter::Console.table_options must be a Hash")
+    end
+
+    headings = %w{ coverage file lines missed missing }
+
+    opts = table_options.merge({:headings => headings, :rows => table})
+    t = Terminal::Table.new(opts)
+    puts t
+  end
+
+  def block_output(files, root)
+    puts ""
+    files.each do |f|
+      puts sprintf("%8.8s: %s", 'file', f.filename.gsub(root + "/", ''))
+      puts sprintf("%8.8s: %s (%d/%d lines)", 'coverage', 
+                   colorize(sprintf("%.2f%%", f.covered_percent)), 
+                   f.covered_lines.count, f.lines_of_code)
+      puts sprintf("%8.8s: %s", 'missed', missed(f.missed_lines).join(", "))
+      puts ""
     end
   end
 
