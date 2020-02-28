@@ -159,7 +159,7 @@ class SimpleCov::Formatter::Console
 
   # format per-file results output as plain text blocks
   def block_output(files, root)
-    blocks = [""]
+    blocks = []
     files.each do |f|
       block = []
       block << sprintf("%8.8s: %s", 'file', f.filename.gsub(root + "/", ''))
@@ -169,7 +169,7 @@ class SimpleCov::Formatter::Console
       block << sprintf("%8.8s: %s", 'missed', missed(f.missed_lines).join(", "))
       blocks << block.join("\n")
     end
-    blocks.join("\n") 
+    "\n" << blocks.join("\n\n") << "\n"
   end
 
 end
