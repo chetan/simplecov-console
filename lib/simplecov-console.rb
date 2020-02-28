@@ -169,7 +169,7 @@ class SimpleCov::Formatter::Console
       block << sprintf("%8.8s: %s", 'missed', missed(f.missed_lines).join(", "))
       blocks << block.join("\n")
     end
-    "\n" << blocks.join("\n\n") << "\n"
+    "\n" << blocks.join("\n\n") << "\n\n"
   end
 
 end

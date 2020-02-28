@@ -46,7 +46,7 @@ class TestSimplecovConsole < MiniTest::Test
     files = [
       SourceFile.new('foo.rb',5,[2,3],[Line.new(1), Line.new(4), Line.new(5)],40.0)
     ]
-    expected = "\n    file: foo.rb\ncoverage: 40.00% (2/5 lines)\n  missed: 1, 4-5"
+    expected = "\n    file: foo.rb\ncoverage: 40.00% (2/5 lines)\n  missed: 1, 4-5\n\n"
     assert_equal expected, @console.block_output(files,'/')
   end
 end
