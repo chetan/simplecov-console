@@ -93,7 +93,7 @@ SimpleCov.formatter = SimpleCov::Formatter::Console
 
 ### Block output style
 
-As an alternative to the default table output format, results can be printed as plain text blocks instead by setting 
+As an alternative to the default table output format, results can be printed as plain text blocks instead by setting
 the formatter `output_style` to 'block':
 
 ```ruby
@@ -133,6 +133,10 @@ coverage: 44.00% (28/50 lines)
 
 ## History
 
+### 0.7 (2020.03.04)
+
+- Added new 'block' style output option - thanks [@hpainter](https://github.com/hpainter)! ([#15](https://github.com/chetan/simplecov-console/issues/15))
+
 ### 0.6 (2019.11.08)
 
 - Added new config options: `sort`, `show_covered`, and `max_rows`
@@ -154,5 +158,5 @@ coverage: 44.00% (28/50 lines)
 
 ### Copyright
 
-Copyright (c) 2019 Chetan Sarva. See LICENSE.txt for
+Copyright (c) 2020 Chetan Sarva. See LICENSE.txt for
 further details.
