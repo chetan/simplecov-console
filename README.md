@@ -91,6 +91,46 @@ SimpleCov::Formatter::Console.table_options = {:style => {:width => 200}}
 SimpleCov.formatter = SimpleCov::Formatter::Console
 ```
 
+### Block output style
+
+As an alternative to the default table output format, results can be printed as plain text blocks instead by setting 
+the formatter `output_style` to 'block':
+
+```ruby
+SimpleCov::Formatter::Console.output_style = 'block'
+SimpleCov.formatter = SimpleCov::Formatter::Console
+```
+
+Example output:
+
+```text
+COVERAGE:  82.34% -- 2345/2848 lines in 111 files
+
+showing bottom (worst) 5 of 69 files
+
+    file: lib/bixby/api/websocket_server.rb
+coverage: 22.73% (17/22 lines)
+  missed: 11, 14, 17-18, 20-22, 24, 28-30, 32, 36-...
+
+    file: app/models/role.rb
+coverage: 30.77% (9/13 lines)
+  missed: 28-34, 36-37
+
+    file: lib/bixby/modules/metrics/rescan.rb
+coverage: 32.14% (19/28 lines)
+  missed: 19-23, 27-31, 33-37, 39-41, 43
+
+    file: lib/archie/mail.rb
+coverage: 42.86% (8/14 lines)
+  missed: 6-8, 12-15, 22
+
+    file: lib/archie/controller.rb
+coverage: 44.00% (28/50 lines)
+  missed: 18-21, 23, 27-30, 32, 38-40, 44-45, 48-4...
+
+42 file(s) with 100% coverage not shown
+```
+
 ## History
 
 ### 0.6 (2019.11.08)
