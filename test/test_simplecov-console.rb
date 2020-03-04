@@ -18,6 +18,10 @@ class TestSimplecovConsole < MiniTest::Test
     @console = SimpleCov::Formatter::Console.new
   end
 
+  def teardown
+    SimpleCov::Formatter::Console.output_style = 'table'
+  end
+
   def test_defined
     assert defined?(SimpleCov::Formatter::Console)
     assert defined?(SimpleCov::Formatter::Console::VERSION)
