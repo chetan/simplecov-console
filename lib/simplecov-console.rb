@@ -1,4 +1,3 @@
-require 'terminal-table'
 require 'ansi/code'
 
 class SimpleCov::Formatter::Console
@@ -27,6 +26,15 @@ class SimpleCov::Formatter::Console
   SimpleCov::Formatter::Console.output_style = ENV.fetch('OUTPUT_STYLE', 'table')
 
   def format(result)
+
+    if SimpleCov::Formatter::Console.output_style == 'block' then
+      require 'simplecov-console/output/block'
+      extend BlockOutput
+    else
+      # default to table
+      require './output/table'
+      extend TableOutput
+    end
 
     root = nil
     if Module.const_defined? :ROOT then
@@ -76,8 +84,8 @@ class SimpleCov::Formatter::Console
       files = files.slice(0, max_rows)
     end
 
-    puts send(SimpleCov::Formatter::Console.output_style << "_output",files,root)
-    
+    puts output(files,root)
+
     if covered_files > 0 then
       puts "#{covered_files} file(s) with 100% coverage not shown"
     end
@@ -132,44 +140,6 @@ class SimpleCov::Formatter::Console
     else
       ANSI.red { s }
     end
-  end
-
-  # format per-file results output using Terminal::Table
-  def table_output(files, root)
-    table = files.map do |f|
-      [
-        colorize(pct(f)),
-        f.filename.gsub(root + "/", ''),
-        f.lines_of_code,
-        f.missed_lines.count,
-        missed(f.missed_lines).join(", ")
-      ]
-    end
-
-    table_options = SimpleCov::Formatter::Console.table_options || {}
-    if !table_options.kind_of?(Hash) then
-      raise ArgumentError.new("SimpleCov::Formatter::Console.table_options must be a Hash")
-    end
-
-    headings = %w{ coverage file lines missed missing }
-
-    opts = table_options.merge({:headings => headings, :rows => table})
-    Terminal::Table.new(opts)
-  end
-
-  # format per-file results output as plain text blocks
-  def block_output(files, root)
-    blocks = []
-    files.each do |f|
-      block = []
-      block << sprintf("%8.8s: %s", 'file', f.filename.gsub(root + "/", ''))
-      block << sprintf("%8.8s: %s (%d/%d lines)", 'coverage', 
-                   colorize(sprintf("%.2f%%", f.covered_percent)), 
-                   f.covered_lines.count, f.lines_of_code)
-      block << sprintf("%8.8s: %s", 'missed', missed(f.missed_lines).join(", "))
-      blocks << block.join("\n")
-    end
-    "\n" << blocks.join("\n\n") << "\n\n"
   end
 
 end
