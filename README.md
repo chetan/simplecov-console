@@ -133,6 +133,10 @@ coverage: 44.00% (28/50 lines)
 
 ## History
 
+### 0.7.1 (2020.03.05)
+
+- Fix: block output doesn't work with frozen string literal ([#16](https://github.com/chetan/simplecov-console/issues/16))
+
 ### 0.7 (2020.03.04)
 
 - Added new 'block' style output option - thanks [@hpainter](https://github.com/hpainter)! ([#15](https://github.com/chetan/simplecov-console/issues/15))
