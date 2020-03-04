@@ -133,6 +133,10 @@ coverage: 44.00% (28/50 lines)
 
 ## History
 
+### 0.7.2 (2020.03.05)
+
+- Fix: table output include ([#17](https://github.com/chetan/simplecov-console/issues/17))
+
 ### 0.7.1 (2020.03.05)
 
 - Fix: block output doesn't work with frozen string literal ([#16](https://github.com/chetan/simplecov-console/issues/16))
