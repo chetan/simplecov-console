@@ -25,16 +25,19 @@ class SimpleCov::Formatter::Console
   # configure output format ('table', 'block')
   SimpleCov::Formatter::Console.output_style = ENV.fetch('OUTPUT_STYLE', 'table')
 
-  def format(result)
-
+  def include_output_style
     if SimpleCov::Formatter::Console.output_style == 'block' then
       require 'simplecov-console/output/block'
       extend BlockOutput
     else
       # default to table
-      require './output/table'
+      require 'simplecov-console/output/table'
       extend TableOutput
     end
+  end
+
+  def format(result)
+    include_output_style
 
     root = nil
     if Module.const_defined? :ROOT then

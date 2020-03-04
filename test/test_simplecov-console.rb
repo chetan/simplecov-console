@@ -32,21 +32,24 @@ class TestSimplecovConsole < MiniTest::Test
 
   def test_table_output
     SimpleCov::Formatter::Console.output_style = 'table'
+    @console.include_output_style
     files = [
       SourceFile.new('foo.rb',5,[2,3],[Line.new(1), Line.new(4), Line.new(5)],40.0)
     ]
-    actual = @console.table_output(files,'/')
+    actual = @console.output(files,'/')
     assert actual.is_a? Terminal::Table
-    assert_equal 1, actual.rows.count 
+    assert_equal 1, actual.rows.count
   end
 
   def test_block_output
     SimpleCov::Formatter::Console.use_colors = false
     SimpleCov::Formatter::Console.output_style = 'block'
+    @console.include_output_style
+
     files = [
       SourceFile.new('foo.rb',5,[2,3],[Line.new(1), Line.new(4), Line.new(5)],40.0)
     ]
     expected = "\n    file: foo.rb\ncoverage: 40.00% (2/5 lines)\n  missed: 1, 4-5\n\n"
-    assert_equal expected, @console.block_output(files,'/')
+    assert_equal expected, @console.output(files,'/')
   end
 end
