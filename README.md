@@ -131,7 +131,26 @@ coverage: 44.00% (28/50 lines)
 42 file(s) with 100% coverage not shown
 ```
 
+### Branch Coverage Support
+
+When branch coverage is [enabled in simplecov](https://github.com/simplecov-ruby/simplecov/tree/818bc2547842a90c607b4fec834320766a8686de#branch-coverage-ruby--25), branch info will automatically be displayed in the output:
+
+```text
+COVERAGE:  78.26% -- 18/23 lines in 2 files
+BRANCH COVERAGE:  83.33% -- 5/6 branches in 2 branches
+
++----------+-------------------------------+-------+--------+---------------+-----------------+----------+-----------------+------------------+
+| coverage | file                          | lines | missed | missing       | branch coverage | branches | branches missed | branches missing |
++----------+-------------------------------+-------+--------+---------------+-----------------+----------+-----------------+------------------+
+|  72.22%  | lib/simplecov-console-test.rb | 18    | 5      | 10-12, 16, 25 |  83.33%         | 6        | 1               | 25[then]         |
++----------+-------------------------------+-------+--------+---------------+-----------------+----------+-----------------+------------------+
+```
+
 ## History
+
+### 0.8 (2020.11.11)
+
+- Added support for branch coverage - thanks [@robotdana!](https://github.com/robotdana) ([#19](https://github.com/chetan/simplecov-console/pull/19))
 
 ### 0.7.2 (2020.03.05)
 
