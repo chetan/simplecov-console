@@ -17,10 +17,12 @@ class TestSimplecovConsole < MiniTest::Test
   CoverageStatistics = Struct.new(
     :percent
   )
+
   Branch = Struct.new(
     :start_line,
     :type
   )
+
   SourceFileWithBranches = Struct.new(
     :filename,
     :lines_of_code,
@@ -101,7 +103,7 @@ class TestSimplecovConsole < MiniTest::Test
         [Branch.new(2, :then)]
       )
     ]
-    expected = "\n    file: foo.rb\ncoverage: 40.00% (2/5 lines)\n  missed: 1, 4-5\nbranches: 50% (1/2 branches)\n  missed: 2[then]\n\n"
+    expected = "\n    file: foo.rb\ncoverage: 40.00% (2/5 lines)\n  missed: 1, 4-5\nbranches: 50.00% (1/2 branches)\n  missed: 2[then]\n\n"
     assert_equal expected, @console.output(files,'/',true)
   end
 end
