@@ -36,6 +36,11 @@ class SimpleCov::Formatter::Console
     end
   end
 
+  def show_branch_coverage?(result)
+    Gem::Version.new(SimpleCov::VERSION) >= Gem::Version.new('0.18.5') &&
+      result.coverage_statistics[:branch]
+  end
+
   def format(result)
     include_output_style
 
@@ -51,7 +56,11 @@ class SimpleCov::Formatter::Console
     end
 
     puts
-    puts "COVERAGE: #{colorize(pct(result))} -- #{result.covered_lines}/#{result.total_lines} lines in #{result.files.size} files"
+    puts "COVERAGE: #{colorize(pct(result.covered_percent))} -- #{result.covered_lines}/#{result.total_lines} lines in #{result.files.size} files"
+    show_branch_coverage = show_branch_coverage?(result)
+    if show_branch_coverage
+      puts "BRANCH COVERAGE: #{colorize(pct(result.coverage_statistics[:branch].percent))} -- #{result.covered_branches}/#{result.total_branches} branches in #{result.files.size} branches"
+    end
     puts
 
     if root.nil? then
@@ -59,7 +68,14 @@ class SimpleCov::Formatter::Console
     end
 
     if SimpleCov::Formatter::Console.sort == 'coverage'
-      files = result.files.sort{ |a,b| a.covered_percent <=> b.covered_percent }
+      if show_branch_coverage
+        files = result.files.sort do |a,b|
+          (a.covered_percent <=> b.covered_percent).nonzero? ||
+            (a.coverage_statistics[:branch].percent <=> b.coverage_statistics[:branch].percent)
+        end
+      else
+        files = result.files.sort_by(&:covered_percent)
+      end
     else
       files = result.files
     end
@@ -68,7 +84,7 @@ class SimpleCov::Formatter::Console
 
     unless SimpleCov::Formatter::Console.show_covered
       files.select!{ |file|
-        if file.covered_percent == 100 then
+        if file.covered_percent == 100 && (!show_branch_coverage || file.coverage_statistics[:branch].percent == 100) then
           covered_files += 1
           false
         else
@@ -87,12 +103,18 @@ class SimpleCov::Formatter::Console
       files = files.slice(0, max_rows)
     end
 
-    puts output(files,root)
+    puts output(files, root, show_branch_coverage)
 
     if covered_files > 0 then
       puts "#{covered_files} file(s) with 100% coverage not shown"
     end
 
+  end
+
+  def branches_missed(missed_branches)
+    missed_branches.group_by(&:start_line).map do |line_number, branches|
+      "#{line_number}[#{branches.map(&:type).join(',')}]"
+    end
   end
 
   def missed(missed_lines)
@@ -123,8 +145,8 @@ class SimpleCov::Formatter::Console
     group_str
   end
 
-  def pct(obj)
-    sprintf("%6.2f%%", obj.covered_percent)
+  def pct(number)
+    sprintf("%6.2f%%", number)
   end
 
   def use_colors?
@@ -144,5 +166,4 @@ class SimpleCov::Formatter::Console
       ANSI.red { s }
     end
   end
-
 end
