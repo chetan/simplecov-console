@@ -4,7 +4,9 @@ class SimpleCov::Formatter::Console
 
   VERSION = IO.read(File.expand_path("../../VERSION", __FILE__)).strip
 
-  ATTRIBUTES = [:table_options, :use_colors, :max_rows, :show_covered, :sort, :output_style]
+  ATTRIBUTES = [:table_options, :use_colors, :max_rows, :max_lines,
+    :missing_len, :show_covered, :sort, :output_style]
+
   class << self
     attr_accessor(*ATTRIBUTES)
   end
@@ -15,6 +17,10 @@ class SimpleCov::Formatter::Console
 
   # configure max rows from MAX_ROWS env var
   SimpleCov::Formatter::Console.max_rows = ENV.fetch('MAX_ROWS', 15).to_i
+
+  # configure max lines per row and missing len
+  SimpleCov::Formatter::Console.max_lines = ENV.fetch('MAX_LINES', 0).to_i
+  SimpleCov::Formatter::Console.missing_len = ENV.fetch('MISSING_LEN', 0).to_i
 
   # configure show_covered from SHOW_COVERED env var
   SimpleCov::Formatter::Console.show_covered = ENV.fetch('SHOW_COVERED', 'false') == 'true'
@@ -117,6 +123,11 @@ class SimpleCov::Formatter::Console
     end
   end
 
+  # Group missed lines for better display
+  #
+  # @param [Array<SimpleCov::SourceFile::Line>] missed    array of missed lines reported by SimpleCov
+  #
+  # @return [Array<String>] Missing groups of lines
   def missed(missed_lines)
     groups = {}
     base = nil
@@ -142,7 +153,23 @@ class SimpleCov::Formatter::Console
       end
     end
 
+    if SimpleCov::Formatter::Console.max_lines > 0 then
+      # show at most N missing groups of lines
+      group_str = group_str[0, SimpleCov::Formatter::Console.max_lines] << "..."
+    end
+
     group_str
+  end
+
+  # Truncate string to at most N chars (as defined by missing_len)
+  def trunc(str)
+    return str if str.include?("...") # already truncated, skip
+
+    len = SimpleCov::Formatter::Console.missing_len
+    if len > 0 && str.size > len then
+      str = str[0, len].gsub(/,(\s+)?$/, '') + ' ...'
+    end
+    str
   end
 
   def pct(number)

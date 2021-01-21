@@ -40,6 +40,7 @@ class TestSimplecovConsole < MiniTest::Test
 
   def teardown
     SimpleCov::Formatter::Console.output_style = 'table'
+    SimpleCov::Formatter::Console.max_lines = 0
   end
 
   def test_defined
@@ -51,7 +52,15 @@ class TestSimplecovConsole < MiniTest::Test
     missed_lines = [Line.new(1), Line.new(2),
                     Line.new(3), Line.new(5)]
     expected_result = ["1-3", "5"]
-    assert_equal @console.missed(missed_lines), expected_result
+    assert_equal expected_result, @console.missed(missed_lines)
+  end
+
+  def test_max_missed
+    SimpleCov::Formatter::Console.max_lines = 1
+    missed_lines = [Line.new(1), Line.new(2),
+                    Line.new(3), Line.new(5)]
+    expected_result = ["1-3", "..."]
+    assert_equal expected_result, @console.missed(missed_lines)
   end
 
   def test_table_output

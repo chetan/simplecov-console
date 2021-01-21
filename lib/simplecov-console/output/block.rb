@@ -11,7 +11,7 @@ class SimpleCov::Formatter::Console
         block << sprintf("%8.8s: %s (%d/%d lines)", 'coverage',
                     colorize(sprintf("%.2f%%", f.covered_percent)),
                     f.covered_lines.count, f.lines_of_code)
-        block << sprintf("%8.8s: %s", 'missed', missed(f.missed_lines).join(", "))
+        block << sprintf("%8.8s: %s", 'missed', trunc(missed(f.missed_lines).join(", ")))
         if show_branch
           block << sprintf("%8.8s: %s (%d/%d branches)", 'branches',
                     colorize(sprintf("%.2f%%", f.coverage_statistics[:branch].percent)),

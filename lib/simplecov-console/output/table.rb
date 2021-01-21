@@ -11,7 +11,7 @@ class SimpleCov::Formatter::Console
           f.filename.gsub(root + "/", ''),
           f.lines_of_code,
           f.missed_lines.count,
-          missed(f.missed_lines).join(", "),
+          trunc(missed(f.missed_lines).join(", ")),
         ]
         if show_branch
           row += [
