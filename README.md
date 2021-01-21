@@ -47,58 +47,96 @@ showing bottom (worst) 15 of 69 files
 
 ## Configuration
 
-### Disabling colorized output
+simplecov-console is configurable through environment variables and/or via Ruby
+code, generally in your test helper or setup file.
 
-Simply export `NO_COLOR=1` and colors will be disabled.
+### Options
+
+```ruby
+SimpleCov::Formatter::Console.sort = 'path' # sort by file path
+SimpleCov::Formatter::Console.show_covered = true # show all files in coverage report
+SimpleCov::Formatter::Console.max_rows = 15 # integer
+SimpleCov::Formatter::Console.max_lines = 5 # integer
+SimpleCov::Formatter::Console.missing_len = 20 # integer
+SimpleCov::Formatter::Console.output_style = 'block' # 'table' (default) or 'block'
+SimpleCov::Formatter::Console.table_options = {:style => {:width => 200}}
+```
+
+Note that all options except `table_options` can also be set via env var using
+the uppercase name, e.g., `MAX_ROWS`.
+
+#### Disabling colorized output
+
+Color support is active by default. To disable, export `NO_COLOR=1`:
 
 ```sh
 NO_COLOR=1 rake test
 ```
 
-### Sorting the output
+#### Sorting the output
 
-By default the coverage report is sorted by coverage % in descending order.  To sort alphabetically by path, set the `SORT` environment variable to "path", or add the following to your test helper:
+By default the coverage report sorts by coverage % in descending order.  To
+sort alphabetically by path:
 
 ```ruby
 SimpleCov::Formatter::Console.sort = 'path' # sort by file path
 ```
 
-### Showing covered files
+#### Showing covered files
 
-By default, fully covered files are excluded from the report.  To show them, set the `SHOW_COVERED` environment variable to `true` or add the following to your test helper:
+By default, fully covered files are excluded from the report. To include them:
 
 ```ruby
 SimpleCov::Formatter::Console.show_covered = true # show all files in coverage report
 ```
 
-### Maximum rows displayed
+#### Maximum rows displayed
 
-By default, a maximum of 15 files with the worst coverage are displayed in the report.  You can override this limit by setting the `MAX_ROWS` environment variable, or adding the following to your test helper:
+By default, a maximum of 15 files with the worst coverage are displayed in the
+report. To override this limit:
 
 ```ruby
-SimpleCov::Formatter::Console.max_rows = # some number
+SimpleCov::Formatter::Console.max_rows = 20 # integer
 ```
 
-Setting a value of `-1` or `nil` will show all of the files.
+Setting a value of `-1` or `nil` (in Ruby) will show all files.
 
-### Table options
+#### Maximum lines displayed
 
-In some cases, you may need to pass some options to `TerminalTable.new`. For example, if the filenames are
-truncated so much that you can't read them. In that case, you can add a line like this when setting the formatter:
+By default, all missing lines will be included for each displayed file. For
+large source files with poor coverage, this may become unwieldy. To show fewer
+groups of lines:
+
+```ruby
+SimpleCov::Formatter::Console.max_lines = 5 # integer
+```
+
+#### Maximum length of missing lines
+
+As an alternative to the above `max_lines` option, you may limit the missing
+lines output by number of characters:
+
+```ruby
+SimpleCov::Formatter::Console.missing_len = 20 # integer
+```
+
+#### Table options
+
+In some cases, you may need to pass some options to `TerminalTable.new`. For
+example, if the filenames truncate so much that you can't read them, try
+increasing the table width:
 
 ```ruby
 SimpleCov::Formatter::Console.table_options = {:style => {:width => 200}}
-SimpleCov.formatter = SimpleCov::Formatter::Console
 ```
 
-### Block output style
+#### Block output style
 
-As an alternative to the default table output format, results can be printed as plain text blocks instead by setting
-the formatter `output_style` to 'block':
+As an alternative to the default table output format, a simpler block format is
+also available:
 
 ```ruby
 SimpleCov::Formatter::Console.output_style = 'block'
-SimpleCov.formatter = SimpleCov::Formatter::Console
 ```
 
 Example output:
@@ -133,7 +171,9 @@ coverage: 44.00% (28/50 lines)
 
 ### Branch Coverage Support
 
-When branch coverage is [enabled in simplecov](https://github.com/simplecov-ruby/simplecov/tree/818bc2547842a90c607b4fec834320766a8686de#branch-coverage-ruby--25), branch info will automatically be displayed in the output:
+When branch coverage is [enabled in
+simplecov](https://github.com/simplecov-ruby/simplecov/tree/818bc2547842a90c607b4fec834320766a8686de#branch-coverage-ruby--25),
+branch info will automatically be displayed in the output:
 
 ```text
 COVERAGE:  78.26% -- 18/23 lines in 2 files
@@ -147,6 +187,10 @@ BRANCH COVERAGE:  83.33% -- 5/6 branches in 2 branches
 ```
 
 ## History
+
+### 0.9 (2021.01.21)
+
+- Added support for limiting number of lines shown
 
 ### 0.8 (2020.11.11)
 
