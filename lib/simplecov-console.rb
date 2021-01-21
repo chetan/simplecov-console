@@ -83,7 +83,7 @@ class SimpleCov::Formatter::Console
         files = result.files.sort_by(&:covered_percent)
       end
     else
-      files = result.files
+      files = result.files.to_a
     end
 
     covered_files = 0
