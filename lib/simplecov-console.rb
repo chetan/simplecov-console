@@ -153,8 +153,9 @@ class SimpleCov::Formatter::Console
       end
     end
 
-    if SimpleCov::Formatter::Console.max_lines > 0 then
-      # show at most N missing groups of lines
+    max_lines = SimpleCov::Formatter::Console.max_lines
+    if max_lines > 0 && group_str.size > max_lines then
+      # Show at most N missing groups of lines
       group_str = group_str[0, SimpleCov::Formatter::Console.max_lines] << "..."
     end
 
