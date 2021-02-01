@@ -188,13 +188,17 @@ BRANCH COVERAGE:  83.33% -- 5/6 branches in 2 branches
 
 ## History
 
+### 0.9.1 (2021.02.01)
+
+- Fix: Don't add ellipsis if line groups are not truncated - thanks [@lbraun](https://github.com/lbraun)! ([#21](https://github.com/chetan/simplecov-console/pull/21))
+
 ### 0.9 (2021.01.21)
 
 - Added support for limiting number of lines shown
 
 ### 0.8 (2020.11.11)
 
-- Added support for branch coverage - thanks [@robotdana!](https://github.com/robotdana) ([#19](https://github.com/chetan/simplecov-console/pull/19))
+- Added support for branch coverage - thanks [@robotdana](https://github.com/robotdana)! ([#19](https://github.com/chetan/simplecov-console/pull/19))
 
 ### 0.7.2 (2020.03.05)
 
