@@ -5,7 +5,7 @@ class SimpleCov::Formatter::Console
   VERSION = IO.read(File.expand_path("../../VERSION", __FILE__)).strip
 
   ATTRIBUTES = [:table_options, :use_colors, :max_rows, :max_lines,
-    :missing_len, :show_covered, :sort, :output_style]
+    :missing_len, :show_covered, :sort, :output_style, :files_to_filter]
 
   class << self
     attr_accessor(*ATTRIBUTES)
@@ -28,6 +28,8 @@ class SimpleCov::Formatter::Console
   # configure sort from SORT env var
   SimpleCov::Formatter::Console.sort = ENV.fetch('SORT', 'coverage')
 
+  # configure to only rea
+  SimpleCov::Formatter::Console.files_to_filter = ENV.fetch('FILES_TO_FILTER', '').split(', ')
   # configure output format ('table', 'block')
   SimpleCov::Formatter::Console.output_style = ENV.fetch('OUTPUT_STYLE', 'table')
 
@@ -73,17 +75,28 @@ class SimpleCov::Formatter::Console
       return
     end
 
+    if SimpleCov::Formatter::Console.files_to_filter.empty?
+      files = result.files
+    else
+      files = result.files.select  do |file|
+        SimpleCov::Formatter::Console.files_to_filter.include?(file.filename)
+      end
+      if files.nil? || files.empty? then
+        return
+      end
+    end
+
     if SimpleCov::Formatter::Console.sort == 'coverage'
       if show_branch_coverage
-        files = result.files.sort do |a,b|
+        files = files.sort do |a,b|
           (a.covered_percent <=> b.covered_percent).nonzero? ||
             (a.coverage_statistics[:branch].percent <=> b.coverage_statistics[:branch].percent)
         end
       else
-        files = result.files.sort_by(&:covered_percent)
+        files = files.sort_by(&:covered_percent)
       end
     else
-      files = result.files.to_a
+      files = files.to_a
     end
 
     covered_files = 0
