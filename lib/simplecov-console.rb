@@ -65,7 +65,7 @@ class SimpleCov::Formatter::Console
     puts "COVERAGE: #{colorize(pct(result.covered_percent))} -- #{result.covered_lines}/#{result.total_lines} lines in #{result.files.size} files"
     show_branch_coverage = show_branch_coverage?(result)
     if show_branch_coverage
-      puts "BRANCH COVERAGE: #{colorize(pct(result.coverage_statistics[:branch].percent))} -- #{result.covered_branches}/#{result.total_branches} branches in #{result.files.size} branches"
+      puts "BRANCH COVERAGE: #{colorize(pct(result.coverage_statistics[:branch].percent))} -- #{result.covered_branches}/#{result.total_branches} branches in #{result.files.size} files"
     end
     puts
 
