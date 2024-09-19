@@ -1,6 +1,6 @@
 require 'helper'
 
-class TestSimplecovConsole < MiniTest::Test
+class TestSimplecovConsole < Minitest::Test
 
   # mock for SimpleCov::SourceFile::Line
   Line = Struct.new(:line_number)

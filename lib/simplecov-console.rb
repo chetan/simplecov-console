@@ -35,6 +35,8 @@ class SimpleCov::Formatter::Console
     if SimpleCov::Formatter::Console.output_style == 'block' then
       require 'simplecov-console/output/block'
       extend BlockOutput
+    elsif SimpleCov::Formatter::Console.output_style == 'simple' then
+      # do nothing
     else
       # default to table
       require 'simplecov-console/output/table'
@@ -69,9 +71,8 @@ class SimpleCov::Formatter::Console
     end
     puts
 
-    if root.nil? then
-      return
-    end
+    return if SimpleCov::Formatter::Console.output_style == 'simple'
+    return if root.nil?
 
     if SimpleCov::Formatter::Console.sort == 'coverage'
       if show_branch_coverage
