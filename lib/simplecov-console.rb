@@ -5,7 +5,7 @@ class SimpleCov::Formatter::Console
   VERSION = IO.read(File.expand_path("../../VERSION", __FILE__)).strip
 
   ATTRIBUTES = [:table_options, :use_colors, :max_rows, :max_lines,
-    :missing_len, :show_covered, :sort, :output_style]
+    :missing_len, :show_covered, :sort, :output_style, :output_to_file, :output_filename]
 
   class << self
     attr_accessor(*ATTRIBUTES)
