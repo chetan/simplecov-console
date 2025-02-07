@@ -60,6 +60,8 @@ SimpleCov::Formatter::Console.max_lines = 5 # integer
 SimpleCov::Formatter::Console.missing_len = 20 # integer
 SimpleCov::Formatter::Console.output_style = 'block' # 'table' (default) or 'block'
 SimpleCov::Formatter::Console.table_options = {:style => {:width => 200}}
+SimpleCov::Formatter::Console.output_to_file = false
+SimpleCov::Formatter::Console.output_filename = 'results.txt'
 ```
 
 Note that all options except `table_options` can also be set via env var using
@@ -128,6 +130,16 @@ increasing the table width:
 
 ```ruby
 SimpleCov::Formatter::Console.table_options = {:style => {:width => 200}}
+```
+
+#### Output to File and filename
+
+Saves the results to a file defaulted as 'results.txt' (customisable with the `output_filename` option) in the coverage folder.
+Default is false to match existing functionality
+
+```ruby
+SimpleCov::Formatter::Console.output_to_file = true
+SimpleCov::Formatter::Console.output_filename = 'my_coverage.txt'
 ```
 
 #### Block output style
