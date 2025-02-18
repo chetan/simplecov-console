@@ -5,7 +5,7 @@ class SimpleCov::Formatter::Console
   VERSION = IO.read(File.expand_path("../../VERSION", __FILE__)).strip
 
   ATTRIBUTES = [:table_options, :use_colors, :max_rows, :max_lines,
-    :missing_len, :show_covered, :sort, :output_style]
+    :missing_len, :show_covered, :sort, :output_style, :output_to_file, :output_filename]
 
   class << self
     attr_accessor(*ATTRIBUTES)
@@ -30,6 +30,12 @@ class SimpleCov::Formatter::Console
 
   # configure output format ('table', 'block')
   SimpleCov::Formatter::Console.output_style = ENV.fetch('OUTPUT_STYLE', 'table')
+
+  # change output to a file
+  SimpleCov::Formatter::Console.output_to_file = ENV.fetch('SIMPLECOV_OUTPUT_TO_FILE', false)
+
+  # Related to above setting to change the filename
+  SimpleCov::Formatter::Console.output_filename = ENV.fetch('SIMPLECOV_OUTPUT_FILENAME', 'results.txt')
 
   def include_output_style
     if SimpleCov::Formatter::Console.output_style == 'block' then
@@ -61,7 +67,15 @@ class SimpleCov::Formatter::Console
       root = Dir.pwd
     end
 
-    puts
+    result_file_path = ''
+    if SimpleCov::Formatter::Console.output_to_file
+      result_file_path = File.join(SimpleCov.coverage_path, SimpleCov::Formatter::Console.output_filename)
+      # Temporarily assign $stdout to the file
+      file = File.open(result_file_path, 'w')
+      $stdout = file
+    end
+
+    puts unless SimpleCov::Formatter::Console.output_to_file
     puts "COVERAGE: #{colorize(pct(result.covered_percent))} -- #{result.covered_lines}/#{result.total_lines} lines in #{result.files.size} files"
     show_branch_coverage = show_branch_coverage?(result)
     if show_branch_coverage
@@ -115,6 +129,12 @@ class SimpleCov::Formatter::Console
       puts "#{covered_files} file(s) with 100% coverage not shown"
     end
 
+    if SimpleCov::Formatter::Console.output_to_file
+      # Restore $stdout to its original state
+      $stdout = STDOUT
+      file.close
+      puts "Coverage report generated for #{result.command_name} to #{result_file_path}"
+    end
   end
 
   def branches_missed(missed_branches)
