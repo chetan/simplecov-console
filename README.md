@@ -53,6 +53,7 @@ code, generally in your test helper or setup file.
 ### Options
 
 ```ruby
+SimpleCov::Formatter::Console.use_colors = false # true (default) or false
 SimpleCov::Formatter::Console.sort = 'path' # sort by file path
 SimpleCov::Formatter::Console.show_covered = true # show all files in coverage report
 SimpleCov::Formatter::Console.max_rows = 15 # integer
@@ -69,7 +70,13 @@ the uppercase name, e.g., `MAX_ROWS`.
 
 #### Disabling colorized output
 
-Color support is active by default. To disable, export `NO_COLOR=1`:
+Color support is active by default. To disable:
+
+```ruby
+SimpleCov::Formatter::Console.use_colors = false
+```
+
+Or export `NO_COLOR=1`:
 
 ```sh
 NO_COLOR=1 rake test
