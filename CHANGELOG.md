@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.4 (2025.07.23)
+
+- Docs: updated `use_color` info - thanks [@th7](https://github.com/th7)! ([#27](https://github.com/chetan/simplecov-console/pull/27))
+
+## 0.9.3 (2025.02.18)
+
+- Added `output_to_file` and `output_filename` options - thanks [@miegs3](https://github.com/miegs3)! ([#26](https://github.com/chetan/simplecov-console/pull/26))
+
 ## 0.9.2 (2024.09.17)
 
 - Fix: typo in output ([#24](https://github.com/chetan/simplecov-console/pull/24))
