@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0".freeze) if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib".freeze]
   s.authors = ["Chetan Sarva".freeze]
-  s.date = "2025-02-18"
+  s.date = "2025-07-23"
   s.description = "Simple console output formatter for SimpleCov".freeze
   s.email = "chetan@pixelcop.net".freeze
   s.extra_rdoc_files = [
