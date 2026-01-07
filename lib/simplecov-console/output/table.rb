@@ -18,7 +18,7 @@ class SimpleCov::Formatter::Console
             colorize(pct(f.coverage_statistics[:branch].percent)),
             f.total_branches.count,
             f.missed_branches.count,
-            branches_missed(f.missed_branches).join(", ")
+            trunc(branches_missed(f.missed_branches).join(", "), type: :branch)
           ]
         end
 

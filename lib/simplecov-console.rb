@@ -4,8 +4,19 @@ class SimpleCov::Formatter::Console
 
   VERSION = IO.read(File.expand_path("../../VERSION", __FILE__)).strip
 
-  ATTRIBUTES = [:table_options, :use_colors, :max_rows, :max_lines,
-    :missing_len, :show_covered, :sort, :output_style, :output_to_file, :output_filename]
+  ATTRIBUTES = [
+    :branch_missing_len,
+    :max_lines,
+    :max_rows,
+    :missing_len,
+    :output_filename,
+    :output_style,
+    :output_to_file,
+    :show_covered,
+    :sort,
+    :table_options,
+    :use_colors,
+  ]
 
   class << self
     attr_accessor(*ATTRIBUTES)
@@ -21,6 +32,7 @@ class SimpleCov::Formatter::Console
   # configure max lines per row and missing len
   SimpleCov::Formatter::Console.max_lines = ENV.fetch('MAX_LINES', 0).to_i
   SimpleCov::Formatter::Console.missing_len = ENV.fetch('MISSING_LEN', 0).to_i
+  SimpleCov::Formatter::Console.branch_missing_len = ENV.fetch('BRANCH_MISSING_LEN', 0).to_i
 
   # configure show_covered from SHOW_COVERED env var
   SimpleCov::Formatter::Console.show_covered = ENV.fetch('SHOW_COVERED', 'false') == 'true'
@@ -183,12 +195,16 @@ class SimpleCov::Formatter::Console
   end
 
   # Truncate string to at most N chars (as defined by missing_len)
-  def trunc(str)
+  def trunc(str, type: :line)
     return str if str.include?("...") # already truncated, skip
 
-    len = SimpleCov::Formatter::Console.missing_len
-    if len > 0 && str.size > len then
-      str = str[0, len].gsub(/,(\s+)?$/, '') + ' ...'
+    len = type == :branch ? SimpleCov::Formatter::Console.branch_missing_len : SimpleCov::Formatter::Console.missing_len
+    if len > 0 && str.size > len
+      truncated = str[0, len]
+      if type == :branch && !truncated.end_with?(']')
+        truncated = truncated.sub(/,?\s*\d+(\[[^\]]*)?$/, '') # removes partial branch symbols (3[then, 3[t, 3, etc.)
+      end
+      str = truncated.gsub(/,(\s+)?$/, '') + ' ...'
     end
     str
   end
