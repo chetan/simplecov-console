@@ -1,6 +1,6 @@
 require 'helper'
 
-class TestSimplecovConsole < MiniTest::Test
+class TestSimplecovConsole < Minitest::Test
 
   # mock for SimpleCov::SourceFile::Line
   Line = Struct.new(:line_number)
@@ -41,6 +41,9 @@ class TestSimplecovConsole < MiniTest::Test
   def teardown
     SimpleCov::Formatter::Console.output_style = 'table'
     SimpleCov::Formatter::Console.max_lines = 0
+    SimpleCov::Formatter::Console.missing_len = 0
+    SimpleCov::Formatter::Console.branch_missing_len = 0
+    SimpleCov::Formatter::Console.use_colors = true
   end
 
   def test_defined
@@ -118,5 +121,62 @@ class TestSimplecovConsole < MiniTest::Test
     ]
     expected = "\n    file: foo.rb\ncoverage: 40.00% (2/5 lines)\n  missed: 1, 4-5\nbranches: 50.00% (1/2 branches)\n  missed: 2[then]\n\n"
     assert_equal expected, @console.output(files,'/',true)
+  end
+
+  def test_trunc_with_line_type
+    SimpleCov::Formatter::Console.missing_len = 10
+
+    assert_equal "1, 2, 3, 4 ...", @console.trunc("1, 2, 3, 4, 5", type: :line)
+    assert_equal "short", @console.trunc("short", type: :line)
+  end
+
+  def test_trunc_with_branch_type
+    SimpleCov::Formatter::Console.branch_missing_len = 16
+
+    assert_equal "1[then], 2[else]", @console.trunc("1[then], 2[else]", type: :branch)
+    assert_equal "1[then], 2[else] ...", @console.trunc("1[then], 2[else], 3[then]", type: :branch)
+  end
+
+  def test_trunc_branch_independent_of_missing_len
+    SimpleCov::Formatter::Console.missing_len = 5
+    SimpleCov::Formatter::Console.branch_missing_len = 20
+
+    assert_equal "1[then], 2[else]", @console.trunc("1[then], 2[else]", type: :branch)
+    assert_equal "1, 2 ...", @console.trunc("1, 2, 3, 4", type: :line)
+  end
+
+  def test_block_output_with_truncated_branches
+    SimpleCov::Formatter::Console.use_colors = false
+    SimpleCov::Formatter::Console.output_style = 'block'
+    SimpleCov::Formatter::Console.branch_missing_len = 10
+    @console.include_output_style
+
+    files = [
+      SourceFileWithBranches.new(
+        'foo.rb', 5, [2, 3], [Line.new(1)], 40.0,
+        {branch: CoverageStatistics.new(25.0)}, [1, 2, 3, 4],
+        [Branch.new(2, :then), Branch.new(3, :else), Branch.new(4, :then)]
+      )
+    ]
+    actual = @console.output(files, '/', true)
+
+    assert_includes actual, "2[then] ..."
+  end
+
+  def test_table_output_with_truncated_branches
+    SimpleCov::Formatter::Console.output_style = 'table'
+    SimpleCov::Formatter::Console.branch_missing_len = 10
+    @console.include_output_style
+
+    files = [
+      SourceFileWithBranches.new(
+        'foo.rb', 5, [2, 3], [Line.new(1)], 40.0,
+        {branch: CoverageStatistics.new(25.0)}, [1, 2, 3, 4],
+        [Branch.new(2, :then), Branch.new(3, :else), Branch.new(4, :then)]
+      )
+    ]
+    actual = @console.output(files, '/', true)
+
+    assert_includes actual.to_s, "2[then] ..."
   end
 end

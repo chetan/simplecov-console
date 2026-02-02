@@ -16,7 +16,7 @@ class SimpleCov::Formatter::Console
           block << sprintf("%8.8s: %s (%d/%d branches)", 'branches',
                     colorize(sprintf("%.2f%%", f.coverage_statistics[:branch].percent)),
                     (f.total_branches.count - f.missed_branches.count), f.total_branches.count)
-          block << sprintf("%8.8s: %s", 'missed', branches_missed(f.missed_branches).join(", "))
+          block << sprintf("%8.8s: %s", 'missed', trunc(branches_missed(f.missed_branches).join(", "), type: :branch))
         end
         blocks << block.join("\n")
       end
