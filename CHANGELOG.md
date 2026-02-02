@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.5 (2026.02.02)
+
+- Feat: added `branch_missing_len` option - thanks [@nialbima](https://github.com/nialbima)! ([#28](https://github.com/chetan/simplecov-console/pull/28))
+
 ## 0.9.4 (2025.07.23)
 
 - Docs: updated `use_color` info - thanks [@th7](https://github.com/th7)! ([#27](https://github.com/chetan/simplecov-console/pull/27))

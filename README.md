@@ -59,6 +59,7 @@ SimpleCov::Formatter::Console.show_covered = true # show all files in coverage r
 SimpleCov::Formatter::Console.max_rows = 15 # integer
 SimpleCov::Formatter::Console.max_lines = 5 # integer
 SimpleCov::Formatter::Console.missing_len = 20 # integer
+SimpleCov::Formatter::Console.branch_missing_len = 0 # integer
 SimpleCov::Formatter::Console.output_style = 'block' # 'table' (default) or 'block'
 SimpleCov::Formatter::Console.table_options = {:style => {:width => 200}}
 SimpleCov::Formatter::Console.output_to_file = false
@@ -203,6 +204,14 @@ BRANCH COVERAGE:  83.33% -- 5/6 branches in 2 branches
 +----------+-------------------------------+-------+--------+---------------+-----------------+----------+-----------------+------------------+
 |  72.22%  | lib/simplecov-console-test.rb | 18    | 5      | 10-12, 16, 25 |  83.33%         | 6        | 1               | 25[then]         |
 +----------+-------------------------------+-------+--------+---------------+-----------------+----------+-----------------+------------------+
+```
+
+#### Maximum length of missing branches
+
+Similar to `missing_len` above, set `branch_missing_len` to truncate long lists of missing branches.
+
+```ruby
+SimpleCov::Formatter::Console.branch_missing_len = 10 # integer (default is 0, no limit)
 ```
 
 ## History
