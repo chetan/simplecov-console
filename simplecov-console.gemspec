@@ -20,19 +20,12 @@ Gem::Specification.new do |s|
     "README.md"
   ]
   s.files = [
-    ".document",
     "CHANGELOG.md",
-    "Gemfile",
     "LICENSE.txt",
     "README.md",
-    "Rakefile",
-    "VERSION",
     "lib/simplecov-console.rb",
     "lib/simplecov-console/output/block.rb",
-    "lib/simplecov-console/output/table.rb",
-    "simplecov-console.gemspec",
-    "test/helper.rb",
-    "test/test_simplecov-console.rb"
+    "lib/simplecov-console/output/table.rb"
   ]
   s.homepage = "http://github.com/chetan/simplecov-console".freeze
   s.licenses = ["MIT".freeze]
@@ -61,4 +54,3 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<juwelier>.freeze, [">= 0"])
   end
 end
-

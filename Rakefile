@@ -21,6 +21,7 @@ Juwelier::Tasks.new do |gem|
   gem.description = %Q{Simple console output formatter for SimpleCov}
   gem.email = "chetan@pixelcop.net"
   gem.authors = ["Chetan Sarva"]
+  gem.files = FileList["CHANGELOG.md", "LICENSE.txt", "README.md", "lib/**/*.rb"]
   # dependencies defined in Gemfile
 end
 Juwelier::RubygemsDotOrgTasks.new
